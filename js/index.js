@@ -21,10 +21,48 @@
 
 window.addEventListener('DOMContentLoaded', () => {
   const start = document.querySelector('#start');
+  const quizBlock = document.querySelector('#quizBlock');
   start.addEventListener('click', function (e) {
-    document.querySelector('#quizBlock').style.display = 'block';
+    quizBlock.style.display = 'block';
     start.style.display = 'none';
+
+    let count = 20;
+    let display = document.querySelector('#time');
+    //task 5: call countdown timer
+    startTime(count,display);
+
+
   });
+/////
+  ////Task 5: Add a countdown timer 
+  const startTime = (count,display) =>{
+    let i=0;
+    
+   
+      //alert('work');
+      let timeValue = setInterval(function(){ 
+        i++;
+        //alert(i);
+        
+        console.log('count' + i);
+        if(i<10){
+          display.innerHTML = `00:0${i}`;
+        } else{
+          display.innerHTML = `00:${i}`;
+        }
+
+        
+        if(i === count){
+    
+          clearInterval(timeValue);
+          displayScore();
+        }
+      }, 1000);
+    
+  };
+/////
+
+
   // quizArray QUESTIONS & ANSWERS
   // q = QUESTION, o = OPTIONS, a = CORRECT ANSWER
   // Basic ideas from https://code-boxx.com/simple-javascript-quiz/
@@ -40,8 +78,18 @@ window.addEventListener('DOMContentLoaded', () => {
       a: 3,
     },
     {
-      q: 'What is the capital of Australia',
+      q: 'What is the capital of Australia?',
       o: ['Sydney', 'Canberra', 'Melbourne', 'Perth'],
+      a: 1,
+    },
+    {
+      q: ' What is the largest country in the world?',
+      o: ['America', 'China', 'Canada', 'Russia'],
+      a: 3,
+    },
+    {
+      q: 'What is the hottest continent on Earth?',
+      o: ['Thailand', 'Africa', 'Mexico', 'Brazil'],
       a: 1,
     },
   ];
@@ -63,7 +111,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Calculate the score
+  // task 1: Calculate the score
   const calculateScore = () => {
     let score = 0;
     quizArray.map((quizItem, index) => {
@@ -76,15 +124,57 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (quizItem.a == i) {
           //change background color of li element here
+          liElement.style.backgroundColor = "#61b7cf";
+
         }
 
         if (radioElement.checked) {
           // code for task 1 goes here
+          //alert('task' + i);
+          // console.log(quizItem);
+          // console.log(quizItem.a);
+          // console.log(radioElement);
+          // console.log(i);
+          if(quizItem.a == i){
+            score ++;
+            // console.log('code ran!');
+          }
         }
       }
     });
+    console.log('score is:  ' + score);
+    return score;
   };
 
   // call the displayQuiz function
   displayQuiz();
+
+const btnSubmit = document.querySelector('#btnSubmit');
+const btnReset = document.querySelector('#btnReset');
+const score = document.querySelector('#score');
+
+// task2: Add an Event listener for the submit button
+btnSubmit.addEventListener('click',(event) =>{
+  displayScore();
+  
 });
+// task2: display score and disable the button 
+const displayScore = ()=>{
+  const finalScore = calculateScore(); 
+  score.innerHTML =  `Your final score is ${finalScore}`;
+  btnSubmit.style.display = 'none';
+};
+
+//task 4: Reload the page when the reset button is clicked
+btnReset.addEventListener('click', (event)=>{
+  //document.querySelector('#quizBlock').reload();
+  location.reload();
+  return false;
+  
+});
+
+
+
+
+});
+
